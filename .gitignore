@@ -1,0 +1,21 @@
+# secrets and personal data: never commit
+.env
+*.pem
+*.key
+credentials.json
+token.json
+data/*
+!data/.gitkeep
+*.db
+*.db-*
+*.bak
+
+# tooling and local state
+.venv/
+__pycache__/
+*.pyc
+.claude/
+.agents/
+.playwright-mcp/
+.DS_Store
+Thumbs.db
