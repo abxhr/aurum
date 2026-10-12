@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Aurum</title>
+<meta name="theme-color" content="#ECEEE9">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Aurum">
+<link rel="manifest" href="/static/manifest.json">
+<link rel="apple-touch-icon" href="/static/icons/apple-touch-icon.png">
+<link rel="icon" type="image/svg+xml" href="/static/icons/logo.svg">
+<link rel="stylesheet" href="/static/fonts/fonts.css">
+<link rel="stylesheet" href="/static/style.css">
+<script src="/static/theme.js"></script>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11l9-8 9 8M5 10v10h5v-6h4v6h5V10"/></symbol>
+  <symbol id="i-layers" viewBox="0 0 24 24"><path d="M12 3l9 5-9 5-9-5 9-5zM3 13l9 5 9-5M3 17.5l9 5 9-5"/></symbol>
+  <symbol id="i-card" viewBox="0 0 24 24"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="M2.5 10h19M6 15h4"/></symbol>
+  <symbol id="i-wallet" viewBox="0 0 24 24"><path d="M4 7.5A2.5 2.5 0 016.5 5H19v14H6.5A2.5 2.5 0 014 16.5v-9zM4 8h13M15.5 13h.01"/></symbol>
+  <symbol id="i-trend" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8M15 7h6v6"/></symbol>
+  <symbol id="i-cash" viewBox="0 0 24 24"><rect x="2.5" y="6" width="19" height="12" rx="2"/><circle cx="12" cy="12" r="2.7"/><path d="M6 9.5v.01M18 14.5v.01"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 11a8 8 0 00-14.9-3M4 5v3.5h3.5M4 13a8 8 0 0014.9 3M20 19v-3.5h-3.5"/></symbol>
+  <symbol id="i-camera" viewBox="0 0 24 24"><path d="M4 8h3l1.5-2h7L17 8h3v11H4V8z"/><circle cx="12" cy="13" r="3.5"/></symbol>
+  <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M18.7 5.3l-2.1 2.1M7.4 16.6l-2.1 2.1"/></symbol>
+  <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3zM19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8L19 16z"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></symbol>
+  <symbol id="i-up" viewBox="0 0 24 24"><path d="M7 17L17 7M8 7h9v9"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24"><path d="M7 7l10 10M17 8v9H8"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 4l9 16H3L12 4zM12 10v4M12 17h.01"/></symbol>
+</defs></svg>
+<div class="layout">
+  <aside class="side">
+    <div class="logo">
+      <div class="logo-mark" style="background:none"><img src="/static/icons/logo.svg" alt="" width="36" height="36" style="border-radius:9px;display:block"></div>
+      <div class="logo-text"><span id="appTitle">Aurum</span><small>Private, on this device</small></div>
+    </div>
+    <nav class="tabs" id="nav">
+      <button class="tab active" data-page="dashboard"><svg class="i"><use href="#i-home"/></svg>Overview</button>
+      <button class="tab" data-page="all"><svg class="i"><use href="#i-layers"/></svg>Portfolio</button>
+      <button class="tab" data-page="cards"><svg class="i"><use href="#i-card"/></svg>Cards<span class="badge due-badge" id="dueBadge" style="display:none"></span></button>
+      <button class="tab" data-page="plan"><svg class="i"><use href="#i-target"/></svg>Plan</button>
+      <button class="tab" data-page="income"><svg class="i"><use href="#i-cash"/></svg>Income</button>
+      <button class="tab" data-page="bank"><svg class="i"><use href="#i-wallet"/></svg>Bank</button>
+      <button class="tab" data-page="budget"><svg class="i"><use href="#i-wallet"/></svg>Budget</button>
+      <button class="tab" data-page="market"><svg class="i"><use href="#i-trend"/></svg>Market</button>
+      <button class="tab" data-page="assistant"><svg class="i"><use href="#i-spark"/></svg>Assistant</button>
+    </nav>
+    <div class="topbar-tools">
+      <button class="btn ghost sm" id="searchBtn" title="Search (Ctrl+K)"><svg class="i"><use href="#i-search"/></svg><span class="btn-label">Search</span><span class="kbd-hint">Ctrl K</span></button>
+      <button class="btn solid sm" id="refreshBtn"><svg class="i"><use href="#i-refresh"/></svg><span class="btn-label">Sync prices</span></button>
+      <button class="btn ghost sm" id="snapshotBtn" title="Save today's net worth"><svg class="i"><use href="#i-camera"/></svg><span class="btn-label">Save snapshot</span></button>
+      <button class="btn ghost sm" id="settingsBtn" title="Settings"><svg class="i"><use href="#i-gear"/></svg><span class="btn-label">Settings</span></button>
+      <span class="sync-note" id="syncNote"></span>
+    </div>
+  </aside>
+  <main class="content">
+    <div id="page-dashboard" class="page"></div>
+    <div id="page-cards" class="page hidden"></div>
+    <div id="page-plan" class="page hidden"></div>
+    <div id="page-income" class="page hidden"></div>
+    <div id="page-bank" class="page hidden"></div>
+    <div id="page-budget" class="page hidden"></div>
+    <div id="page-category" class="page hidden"></div>
+    <div id="page-market" class="page hidden"></div>
+    <div id="page-assistant" class="page hidden"></div>
+  </main>
+</div>
+
+<!-- MOBILE BOTTOM NAV -->
+<nav class="bottom-nav" id="bottomNav">
+  <button class="bn-item active" data-page="dashboard"><svg class="i"><use href="#i-home"/></svg><span>Overview</span></button>
+  <button class="bn-item" data-page="all"><svg class="i"><use href="#i-layers"/></svg><span>Portfolio</span></button>
+  <button class="bn-item" data-page="cards"><svg class="i"><use href="#i-card"/></svg><span>Cards</span><span class="bn-badge" id="dueBadgeMobile" style="display:none"></span></button>
+  <button class="bn-item" data-page="plan"><svg class="i"><use href="#i-target"/></svg><span>Plan</span></button>
+  <button class="bn-item" data-page="income"><svg class="i"><use href="#i-cash"/></svg><span>Income</span></button>
+  <button class="bn-item" data-page="bank"><svg class="i"><use href="#i-wallet"/></svg><span>Bank</span></button>
+  <button class="bn-item" data-page="budget"><svg class="i"><use href="#i-wallet"/></svg><span>Budget</span></button>
+  <button class="bn-item" data-page="market"><svg class="i"><use href="#i-trend"/></svg><span>Market</span></button>
+</nav>
+
+<!-- COMMAND PALETTE / GLOBAL SEARCH -->
+<div class="palette-overlay" id="paletteOverlay">
+  <div class="palette">
+    <div class="palette-input-row">
+      <span class="palette-icon"><svg class="i"><use href="#i-search"/></svg></span>
+      <input id="paletteInput" type="text" placeholder="Search holdings, cards, budget, pages…" autocomplete="off">
+      <span class="palette-esc">ESC</span>
+    </div>
+    <div class="palette-results" id="paletteResults"></div>
+  </div>
+</div>
+
+<!-- AI ASSISTANT (global) -->
+<button class="assistant-fab" id="assistantFab" title="AI Assistant"><svg class="i"><use href="#i-spark"/></svg><span class="btn-label">Ask</span></button>
+<div class="assistant-panel" id="assistantPanel">
+  <div class="assistant-head">
+    <div><div class="assistant-title">Assistant</div><div class="assistant-sub">Knows your cards, budget & net worth</div></div>
+    <div style="display:flex;gap:6px">
+      <button class="btn ghost sm" id="assistantClearBtn" title="Clear conversation"><svg class="i"><use href="#i-trash"/></svg></button>
+      <button class="btn ghost sm" id="assistantCloseBtn" title="Close"><svg class="i"><use href="#i-close"/></svg></button>
+    </div>
+  </div>
+  <div class="assistant-body" id="assistantBody">
+    <div class="assistant-msg assistant-msg-bot">Hi! Ask me anything about your finances — spending, cards due, budget surplus, or general money questions.</div>
+  </div>
+  <div class="assistant-suggest" id="assistantSuggest">
+    <button class="asg-chip" data-q="How's my spending trending this month?">Spending trend?</button>
+    <button class="asg-chip" data-q="Which card should I pay off first?">Which card first?</button>
+    <button class="asg-chip" data-q="Do I have surplus I could invest?">Surplus to invest?</button>
+  </div>
+  <div class="assistant-input-row">
+    <input id="assistantInput" type="text" placeholder="Ask about your finances…" autocomplete="off">
+    <button class="btn solid sm" id="assistantSendBtn">Send</button>
+  </div>
+</div>
+
+<!-- HOLDING MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <h3 id="modalTitle">Add Holding</h3>
+    <div class="search-zone" id="searchZone">
+      <label class="search-label">Search for a stock, ETF, or fund</label>
+      <div class="search-input-wrap">
+        <input id="searchInput" type="text" placeholder="e.g. NVDA, VTI, a fund name…" autocomplete="off">
+        <span class="search-spin" id="searchSpin"></span>
+      </div>
+      <div class="search-results" id="searchResults"></div>
+      <div class="search-or">— or enter manually below —</div>
+    </div>
+    <div class="form-grid">
+      <label class="full">Name<input id="f_name" type="text"></label>
+      <label>Asset Class
+        <select id="f_asset_class">
+          <option value="stock">Stock</option><option value="etf">ETF</option>
+          <option value="mutual_fund">Mutual Fund</option><option value="bond">Bond / fixed term</option>
+          <option value="savings">Savings</option><option value="gold">Gold</option>
+          <option value="crypto">Crypto</option><option value="cash">Cash</option>
+          <option value="other">Other</option>
+        </select>
+      </label>
+      <label>Price Mode
+        <select id="f_price_mode">
+          <option value="manual">Manual value</option>
+          <option value="ticker">Live ticker (units × price)</option>
+          <option value="nav">Fund NAV from a plugin (units × NAV)</option>
+        </select>
+      </label>
+      <label>Platform<input id="f_platform" type="text"></label>
+      <label>Geography
+        <input id="f_geography" type="text" list="geoList" placeholder="e.g. US, Europe, Global">
+        <datalist id="geoList"><option>US</option><option>Europe</option><option>Asia</option><option>Global</option><option>Other</option></datalist>
+      </label>
+      <label>Currency
+        <select id="f_currency"><option>AED</option><option>AUD</option><option>BRL</option><option>CAD</option><option>CHF</option><option>CNY</option><option>CZK</option><option>DKK</option><option>EUR</option><option>GBP</option><option>HKD</option><option>HUF</option><option>IDR</option><option>ILS</option><option>INR</option><option>JPY</option><option>KRW</option><option>MXN</option><option>MYR</option><option>NOK</option><option>NZD</option><option>PHP</option><option>PLN</option><option>SAR</option><option>SEK</option><option>SGD</option><option>THB</option><option>TRY</option><option>USD</option><option>ZAR</option></select>
+      </label>
+      <label>Symbol / Code<input id="f_symbol" type="text" placeholder="NVDA / 119287"></label>
+      <label class="mode-ticker">Units held<input id="f_units" type="number" step="0.0001"></label>
+      <label class="mode-ticker">Last price<input id="f_last_price" type="number" step="0.0001"></label>
+      <label class="mode-manual">Value (native ccy)<input id="f_manual_value" type="number" step="0.01"></label>
+      <label>Cost basis (optional)<input id="f_cost_basis" type="number" step="0.01"></label>
+      <label>Target %<input id="f_target_pct" type="number" step="0.1"></label>
+      <label class="check full"><input id="f_is_liability" type="checkbox"> This is a liability / debt</label>
+      <label class="full">Notes<textarea id="f_notes" rows="2"></textarea></label>
+    </div>
+    <div class="modal-actions">
+      <button class="btn danger" id="deleteHoldingBtn">Delete</button>
+      <div style="flex:1"></div>
+      <button class="btn ghost" id="cancelHoldingBtn">Cancel</button>
+      <button class="btn solid" id="saveHoldingBtn">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- CARD MODAL -->
+<div class="modal-overlay" id="cardModalOverlay">
+  <div class="modal">
+    <h3 id="cardModalTitle">Add Credit Card</h3>
+    <div class="form-grid">
+      <label class="full">Card Name<input id="c_name" type="text" placeholder="e.g. Everyday Visa"></label>
+      <label>Bank
+        <input id="c_bank" type="text" list="bankList" placeholder="Name of the bank or issuer" autocomplete="off">
+        <datalist id="bankList"></datalist>
+      </label>
+      <label>Last 4 digits<input id="c_last_four" type="text" maxlength="4" placeholder="1234"></label>
+      <label>Currency
+        <select id="c_currency"><option>AED</option><option>AUD</option><option>BRL</option><option>CAD</option><option>CHF</option><option>CNY</option><option>CZK</option><option>DKK</option><option>EUR</option><option>GBP</option><option>HKD</option><option>HUF</option><option>IDR</option><option>ILS</option><option>INR</option><option>JPY</option><option>KRW</option><option>MXN</option><option>MYR</option><option>NOK</option><option>NZD</option><option>PHP</option><option>PLN</option><option>SAR</option><option>SEK</option><option>SGD</option><option>THB</option><option>TRY</option><option>USD</option><option>ZAR</option></select>
+      </label>
+      <label>Statement Day (1-28)<input id="c_stmt_day" type="number" min="1" max="28" value="1"></label>
+      <label>Days Until Due<input id="c_due_days" type="number" min="1" max="60" value="25" placeholder="e.g. 25"></label>
+      <label class="full">PDF Statement Password
+        <input id="c_pdf_password" type="password" placeholder="Password to unlock your statement PDFs">
+        <span style="font-size:11px;color:var(--ink-faint);margin-top:3px">Used to decrypt password-protected PDF statements from bank emails. Stored locally only.</span>
+      </label>
+      <label class="full">Email Sync Config
+        <span style="font-size:11px;color:var(--ink-faint);margin-top:3px;display:block">Leave blank to use bank defaults below.</span>
+      </label>
+      <label>Sender email(s)
+        <input id="c_email_sender" type="text" placeholder="e.g. statements@yourbank.com">
+        <span style="font-size:11px;color:var(--ink-faint);margin-top:3px">Comma-separated. Who the statement email comes from.</span>
+      </label>
+      <label>Subject contains
+        <input id="c_email_subject" type="text" placeholder="e.g. Credit Card Statement">
+        <span style="font-size:11px;color:var(--ink-faint);margin-top:3px">Comma-separated keywords to match in the subject.</span>
+      </label>
+      <label class="full">Amount label in PDF/email
+        <input id="c_amount_label" type="text" placeholder="e.g. Total Amount Due">
+        <span style="font-size:11px;color:var(--ink-faint);margin-top:3px">The exact label preceding the number to fetch as the statement total (e.g. "Total Amount Due", "Statement Balance").</span>
+      </label>
+      <label class="full">Notes<textarea id="c_notes" rows="2"></textarea></label>
+    </div>
+    <div class="modal-actions">
+      <button class="btn danger" id="deleteCardBtn">Delete</button>
+      <div style="flex:1"></div>
+      <button class="btn ghost" id="cancelCardBtn">Cancel</button>
+      <button class="btn solid" id="saveCardBtn">Save Card</button>
+    </div>
+  </div>
+</div>
+
+<!-- STATEMENT DETAIL MODAL -->
+<div class="modal-overlay" id="stmtDetailOverlay">
+  <div class="modal" style="max-width:640px">
+    <h3 id="stmtDetailTitle">Statement</h3>
+    <div id="stmtDetailBody"></div>
+    <div class="modal-actions">
+      <div style="flex:1"></div>
+      <button class="btn ghost" id="closeStmtDetailBtn">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- STATEMENT MODAL -->
+<div class="modal-overlay" id="stmtModalOverlay">
+  <div class="modal">
+    <h3>Add Statement</h3>
+    <p class="muted" id="stmtCardName"></p>
+    <div class="form-grid">
+      <label>Statement Date<input id="s_stmt_date" type="date"></label>
+      <label>Due Date<input id="s_due_date" type="date"></label>
+      <label>Total Amount Due<input id="s_total" type="number" step="0.01"></label>
+      <label>Minimum Due<input id="s_min" type="number" step="0.01"></label>
+      <label class="full">Notes<textarea id="s_notes" rows="2"></textarea></label>
+    </div>
+    <div class="modal-actions">
+      <div style="flex:1"></div>
+      <button class="btn ghost" id="cancelStmtBtn">Cancel</button>
+      <button class="btn solid" id="saveStmtBtn">Save Statement</button>
+    </div>
+  </div>
+</div>
+
+<!-- PAY MODAL -->
+<div class="modal-overlay" id="payModalOverlay">
+  <div class="modal" style="max-width:400px">
+    <h3>Mark as Paid</h3>
+    <p class="muted" id="payStmtInfo"></p>
+    <div class="form-grid">
+      <label class="full">Amount Paid<input id="p_amount" type="number" step="0.01"></label>
+      <label class="full">Payment Date<input id="p_date" type="date"></label>
+    </div>
+    <div class="modal-actions">
+      <div style="flex:1"></div>
+      <button class="btn ghost" id="cancelPayBtn">Cancel</button>
+      <button class="btn solid" id="savePayBtn">Confirm Payment</button>
+    </div>
+  </div>
+</div>
+
+<!-- SETTINGS MODAL -->
+<div class="modal-overlay" id="settingsOverlay">
+  <div class="modal">
+    <h3>Settings</h3>
+    <div class="form-grid">
+      <label>App Title<input id="s_title" type="text"></label>
+      <label>Currency <span class="fine">(all amounts are kept and shown in it)</span><select id="s_currency"><option>AED</option><option>AUD</option><option>BRL</option><option>CAD</option><option>CHF</option><option>CNY</option><option>CZK</option><option>DKK</option><option>EUR</option><option>GBP</option><option>HKD</option><option>HUF</option><option>IDR</option><option>ILS</option><option>INR</option><option>JPY</option><option>KRW</option><option>MXN</option><option>MYR</option><option>NOK</option><option>NZD</option><option>PHP</option><option>PLN</option><option>SAR</option><option>SEK</option><option>SGD</option><option>THB</option><option>TRY</option><option>USD</option><option>ZAR</option></select></label>
+      <label><span id="s_income_lbl">Monthly Income</span><input id="s_income" type="number"></label>
+    </div>
+    <div class="set-section"><div class="set-head">Preferences <span class="set-sub">- how dates, paydays and your home are understood</span></div>
+      <div class="form-grid">
+        <label>Payday (day of the month)<input id="s_payday" type="number" min="1" max="28" placeholder="e.g. 25"></label>
+        <label>Dates on statements<select id="s_dateorder"><option value="dmy">Day first (31/12/2026)</option><option value="mdy">Month first (12/31/2026)</option></select></label>
+        <label>Home country <span class="fine">(charges here are not trips)</span><input id="s_home" type="text" list="homeList" placeholder="e.g. United States" autocomplete="off"><datalist id="homeList"></datalist></label>
+        <label>Time zone <span class="fine">(for market hours)</span><input id="s_tz" type="text" list="tzList" placeholder="e.g. Europe/Berlin" autocomplete="off"><datalist id="tzList"></datalist></label>
+        <label class="full">Payslip deductions that are really your spending <span class="fine">(words in their label, comma separated)</span><input id="s_spendwords" type="text" placeholder="e.g. company shop, travel" autocomplete="off"></label>
+      </div></div>
+    <div class="set-section"><div class="set-head">Bank accounts <span class="set-sub">- statement e-mails to read for transactions (or import a CSV on the Bank page)</span></div>
+      <div id="bankSrcList"></div>
+      <div class="es-btns"><button class="btn ghost sm" type="button" id="bankSrcAdd">Add a bank</button></div></div>
+    <div class="set-section"><div class="set-head">Your names <span class="set-sub">- so bank and payslip lines are read correctly; stays on this computer</span></div>
+      <div class="form-grid">
+        <label>Your first name<input id="s_myname" type="text" autocomplete="off" placeholder="Used to spot transfers to yourself"></label>
+        <label>Family names, comma separated<input id="s_family" type="text" autocomplete="off" placeholder="Used to label money sent to family"></label>
+      </div></div>
+    <div class="set-section"><div class="set-head">AI usage <span class="set-sub">— last 30 days; cached answers cost nothing</span></div><div id="aiUsageBox" class="fine">Loading…</div></div>
+    <div class="set-section"><div class="set-head">Exchange Rates <span class="set-sub" id="fxUnitNote"></span></div>
+      <div id="fxList" class="fx-list"></div></div>
+    <div class="set-section">
+      <div class="set-head">Gmail Email Sync <span class="set-sub">— auto-import credit card statements</span></div>
+      <div class="email-status-box" id="emailStatusBox">
+        <div class="es-row"><span class="es-label">Status</span><span id="esStatus" class="es-val">Checking…</span></div>
+        <div class="es-row"><span class="es-label">Last sync</span><span id="esLastSync" class="es-val">—</span></div>
+        <div class="es-row"><span class="es-label">Emails found</span><span id="esFound" class="es-val">—</span></div>
+      </div>
+      <div class="form-grid" id="imapForm" style="margin-bottom:10px">
+        <label>Gmail address<input id="im_user" type="email" placeholder="you@gmail.com" autocomplete="off"></label>
+        <label>App Password<input id="im_pass" type="password" placeholder="16-character code" autocomplete="off"></label>
+      </div>
+      <div class="es-btns">
+        <button class="btn solid sm" id="imapSaveBtn">Connect with App Password</button>
+        <button class="btn ghost sm" id="imapRemoveBtn" style="display:none">Remove App Password</button>
+      </div>
+      <div class="es-note" style="margin-bottom:14px">Recommended: never expires. Google Account &rarr; Security &rarr; turn on 2-Step Verification &rarr; App passwords &rarr; create one named "Wealth Tracker" and paste the 16-character code here. Read-only use; your normal password is never needed.</div>
+      <div class="es-btns">
+        <button class="btn ghost sm" id="connectGmailBtn">Connect Gmail</button>
+        <button class="btn ghost sm" id="syncEmailBtn" style="display:none">Scan Emails (90 days)</button>
+        <button class="btn ghost sm" id="backfillEmailBtn" style="display:none" title="Imports older statements as already paid, so past months are complete">Import statement history (12 months)</button>
+        <button class="btn ghost sm" id="disconnectGmailBtn" style="display:none">Disconnect</button>
+      </div>
+      <div class="es-note" id="esNote">Or use Google sign-in (needs credentials.json; see GMAIL-SETUP.md).</div>
+    </div>
+    <div class="set-section">
+      <div class="set-head">Bank Account Statement Sync <span class="set-sub">— auto-update Current/Savings balances from a monthly consolidated statement email</span></div>
+      <div class="form-grid">
+        <label>Sender email<input id="bs_sender" type="text" placeholder="statements@yourbank.com"></label>
+        <label>Subject contains<input id="bs_subject" type="text" placeholder="Monthly Consolidated Relationship Statement"></label>
+        <label>Current Account holding
+          <select id="bs_current_holding"><option value="">— none —</option></select>
+        </label>
+        <label>Savings Account holding
+          <select id="bs_savings_holding"><option value="">— none —</option></select>
+        </label>
+        <label class="full">PDF password <span style="display:block;font-weight:400;font-size:12px;color:var(--ink-faint)">(optional — falls back to any saved card password)</span>
+          <input id="bs_pdf_password" type="password" placeholder="Leave blank to reuse a card's password">
+        </label>
+      </div>
+      <div class="email-status-box" id="bsStatusBox" style="margin-top:12px">
+        <div class="es-row"><span class="es-label">Last sync</span><span id="bsLastSync" class="es-val">Never</span></div>
+        <div class="es-row"><span class="es-label">Current Account</span><span id="bsLastCurrent" class="es-val">—</span></div>
+        <div class="es-row"><span class="es-label">Savings Account</span><span id="bsLastSavings" class="es-val">—</span></div>
+      </div>
+      <div class="es-btns" style="margin-top:10px">
+        <button class="btn ghost sm" id="bsSaveBtn">Save Mapping</button>
+        <button class="btn solid sm" id="bsSyncBtn">Sync now</button>
+      </div>
+    </div>
+    <div class="set-section">
+      <div class="set-head">Interactive Brokers <span class="set-sub">— read-only sync of your profile, positions and cash</span></div>
+      <div class="email-status-box" id="ibkrStatusBox">
+        <div class="es-row"><span class="es-label">Status</span><span id="ibStatus" class="es-val">Not connected</span></div>
+        <div class="es-row"><span class="es-label">Account</span><span id="ibAccount" class="es-val">—</span></div>
+        <div class="es-row"><span class="es-label">Last sync</span><span id="ibLastSync" class="es-val">—</span></div>
+      </div>
+      <div class="form-grid">
+        <label>Flex token<input id="ib_token" type="password" placeholder="Paste once — stored locally, never shown again" autocomplete="off"></label>
+        <label>Flex query ID<input id="ib_query" type="text" placeholder="e.g. 1234567" autocomplete="off"></label>
+        <label>Sync every (hours)<input id="ib_interval" type="number" min="1" step="1" value="6"></label>
+      </div>
+      <div class="es-btns" style="margin-top:12px">
+        <button class="btn solid sm" id="ibSaveBtn">Save and sync</button>
+        <button class="btn ghost sm" id="ibSyncBtn">Sync now</button>
+        <button class="btn ghost sm" id="ibRestoreBtn" style="display:none">Restore deleted holdings</button>
+        <button class="btn ghost sm" id="ibDisconnectBtn" style="display:none">Disconnect</button>
+      </div>
+      <div class="es-note" id="ibNote">In IBKR Client Portal: Performance &amp; Reports &rarr; Flex Queries &rarr; create an Activity Flex Query containing Account Information, Open Positions and Cash Report (XML format). Then Flex Web Service &rarr; enable it and generate a token. The token can read reports only; it cannot trade or move money.</div>
+    </div>
+    <div class="set-section">
+      <div class="set-head">eToro <span class="set-sub">— read-only sync of your positions and cash</span></div>
+      <div class="email-status-box">
+        <div class="es-row"><span class="es-label">Status</span><span id="etStatus" class="es-val">Not connected</span></div>
+        <div class="es-row"><span class="es-label">Last sync</span><span id="etLastSync" class="es-val">—</span></div>
+        <div class="es-row"><span class="es-label">Positions</span><span id="etPositions" class="es-val">—</span></div>
+      </div>
+      <div class="form-grid">
+        <label>Public API key<input id="et_api" type="password" placeholder="Paste once; stored locally" autocomplete="off"></label>
+        <label>User key<input id="et_user" type="password" placeholder="Paste once; stored locally" autocomplete="off"></label>
+      </div>
+      <label class="check" style="display:flex;gap:9px;align-items:center;margin:12px 0 0;font-size:13.5px;color:var(--ink-dim)"><input id="et_cfd" type="checkbox"> Include leveraged and short (CFD) positions at their current equity</label>
+      <div class="es-btns" style="margin-top:12px">
+        <button class="btn solid sm" id="etSaveBtn">Save and sync</button>
+        <button class="btn ghost sm" id="etSyncBtn">Sync now</button>
+        <button class="btn ghost sm" id="etRestoreBtn" style="display:none">Restore deleted holdings</button>
+        <button class="btn ghost sm" id="etDisconnectBtn" style="display:none">Disconnect</button>
+      </div>
+      <div class="es-note" id="etNote">In eToro: Settings, then Trading, then API Key Management. Create a key for the Real environment with Read permission only. Syncs every 6 hours. Leveraged, short and copy-trading positions are skipped.</div>
+    </div>
+    <div class="set-section">
+      <div class="set-head">Payslips <span class="set-sub">— read automatically from your Gmail</span></div>
+      <div class="email-status-box">
+        <div class="es-row"><span class="es-label">Payslips found</span><span id="psCount" class="es-val">—</span></div>
+        <div class="es-row"><span class="es-label">Last scan</span><span id="psLast" class="es-val">—</span></div>
+      </div>
+      <div class="form-grid"><label class="full">PDF password<input id="ps_pw" type="password" placeholder="PDF password" autocomplete="off"></label></div>
+      <div class="es-btns" style="margin-top:12px">
+        <button class="btn ghost sm" id="psSaveBtn">Save password</button>
+        <button class="btn solid sm" id="psScanBtn">Scan payslips now</button>
+      </div>
+      <div class="es-note" id="psNote"></div>
+    </div>
+    <div class="set-section">
+      <div class="set-head">Account balances from email <span class="set-sub">— keep an account current from its statement email </span></div>
+      <div id="feedList" class="fx-list" style="margin-bottom:10px"></div>
+      <div class="es-btns">
+        <button class="btn solid sm" id="feedAddBtn">Add account</button>
+        <button class="btn ghost sm" id="feedFindBtn">Find statement emails</button>
+      </div>
+    </div>
+    <div class="set-section">
+      <div class="set-head">Appearance</div>
+      <div class="theme-row">
+        <span>Theme</span>
+        <div class="seg-toggle" id="themeToggle">
+          <button class="seg-btn" data-theme="dark">Dark</button>
+          <button class="seg-btn" data-theme="light">Light</button>
+        </div>
+      </div>
+    </div>
+    <div class="set-section">
+      <div class="set-head">Automated Sync <span class="set-sub">— run email &amp; bank statement sync on a schedule instead of manually</span></div>
+      <div class="theme-row">
+        <span>Enable auto-sync</span>
+        <label class="switch"><input type="checkbox" id="autoSyncEnabled"><span class="switch-track"></span></label>
+      </div>
+      <div class="form-grid" style="margin-top:10px">
+        <label>Every (hours)<input id="autoSyncInterval" type="number" min="1" step="1" value="24"></label>
+      </div>
+      <div class="es-note" id="autoSyncLastRun">Never run yet</div>
+    </div>
+    <div class="set-section">
+      <div class="set-head">Bill Reminders <span class="set-sub">— browser notification for overdue/soon-due card payments while the app is open</span></div>
+      <div class="theme-row">
+        <span>Enable reminders</span>
+        <label class="switch"><input type="checkbox" id="billRemindersEnabled"><span class="switch-track"></span></label>
+      </div>
+      <div class="es-note" id="reminderNote"></div>
+    </div>
+    <div class="set-section">
+      <div class="set-head">Monthly Report</div>
+      <div class="es-btns">
+        <a class="btn ghost sm" href="/api/reports/monthly.csv">Download CSV</a>
+        <a class="btn ghost sm" href="/api/reports/monthly.pdf">Download PDF</a>
+      </div>
+    </div>
+    <div class="set-section">
+      <div class="set-head">Backup <span class="set-sub">— a copy of your data without sign-in details</span></div>
+      <div class="es-btns"><a class="btn ghost sm" href="/api/backup">Download backup</a></div>
+    </div>
+    <div class="set-section">
+      <div class="set-head">Security</div>
+      <div id="secBox" class="fine">Loading…</div>
+    </div>
+    <div class="modal-actions">
+      <div style="flex:1"></div>
+      <button class="btn ghost" id="settingsCancelBtn">Close</button>
+      <button class="btn solid" id="settingsSaveBtn">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- QUICK UPDATE MODAL -->
+<div class="modal-overlay" id="quickUpdateOverlay">
+  <div class="modal" style="max-width:380px">
+    <h3>Update Balance</h3>
+    <p class="muted" id="quickUpdateName"></p>
+    <div class="form-grid">
+      <label class="full">Current Balance (native currency)<input id="qu_value" type="number" step="0.01"></label>
+    </div>
+    <div class="upload-zone">
+      <label>Or import from bank CSV statement</label>
+      <input type="file" id="qu_csv" accept=".csv,.txt">
+      <span class="upload-hint">Drag & drop or click — app reads the closing balance</span>
+    </div>
+    <div class="modal-actions">
+      <div style="flex:1"></div>
+      <button class="btn ghost" id="cancelQuickBtn">Cancel</button>
+      <button class="btn solid" id="saveQuickBtn">Update</button>
+    </div>
+  </div>
+</div>
+
+<!-- GOAL MODAL -->
+<div class="modal-overlay" id="goalOverlay">
+  <div class="modal" style="max-width:380px">
+    <h3>Add Goal</h3>
+    <div class="form-grid">
+      <label class="full">Name<input id="g_name" type="text" placeholder="e.g. Wedding Fund"></label>
+      <label>Target amount <input id="g_target_amount" type="number" step="1"></label>
+      <label>Target date<input id="g_target_date" type="date"></label>
+    </div>
+    <div class="modal-actions">
+      <div style="flex:1"></div>
+      <button class="btn ghost" id="cancelGoalBtn">Cancel</button>
+      <button class="btn solid" id="saveGoalBtn">Save Goal</button>
+    </div>
+  </div>
+</div>
+
+<!-- BUDGET LINE -->
+<div class="modal-overlay" id="budgetOverlay">
+  <div class="modal" style="max-width:540px">
+    <h3 id="biTitle">Add budget line</h3>
+    <div class="form-grid">
+      <label class="full">Name<input id="bi_label" type="text" maxlength="40" placeholder="e.g. Groceries"></label>
+      <label>Type<select id="bi_type"><option value="income">Income</option><option value="expense">Spending</option><option value="savings">Savings</option><option value="invest">Investing</option></select></label>
+      <label>Amount<input id="bi_amount" type="number" step="0.01" min="0"></label>
+      <label>How often<select id="bi_freq"><option value="monthly">Every month</option><option value="quarterly">Every 3 months</option><option value="semester">Every 4 months (semester)</option><option value="yearly">Once a year</option></select></label>
+      <label id="bi_srcwrap">Amount comes from<select id="bi_source"><option value="manual">What I type</option><option value="payslip_typical">Payslips: a typical month (no bonus)</option><option value="payslip_average">Payslips: 12-month average (with bonus)</option></select></label>
+      <div class="full" id="bi_catwrap"><div class="fine" style="margin:0 0 8px">Link the spending categories this line covers. It is then compared with what your cards really spend on them.</div><label class="check" style="display:flex;gap:9px;align-items:center;margin:0 0 10px;font-size:13.5px;color:var(--ink-dim)"><input id="bi_off" type="checkbox"> Paid outside my cards (rent, bank transfer, school fees...)</label><label class="check" id="bi_lumpwrap" style="display:flex;gap:9px;align-items:center;margin:0 0 10px;font-size:13.5px;color:var(--ink-dim)"><input id="bi_lump" type="checkbox"> Irregular (trips, school fees): budget the planned amount; its card spend is not averaged into a normal month</label><div id="bi_cats" class="chips"></div></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn danger" id="biDelete">Remove line</button>
+      <div style="flex:1"></div>
+      <button class="btn ghost" id="biCancel">Cancel</button>
+      <button class="btn solid" id="biSave">Save</button>
+    </div>
+  </div>
+</div>
+<!-- IN-APP DIALOG (replaces browser confirm/prompt, which embedded windows can block) -->
+<div class="modal-overlay dlg-overlay" id="dlgOverlay" role="dialog" aria-modal="true" aria-labelledby="dlgTitle">
+  <div class="modal" style="max-width:420px">
+    <h3 id="dlgTitle"></h3>
+    <p class="muted" id="dlgText" style="margin-top:6px"></p>
+    <div class="form-grid" id="dlgFields" style="grid-template-columns:1fr"></div>
+    <div class="modal-actions">
+      <div style="flex:1"></div>
+      <button class="btn ghost" id="dlgCancel">Cancel</button>
+      <button class="btn solid" id="dlgOk">OK</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script src="/static/apexcharts.min.js"></script>
+<script src="/static/charts.js"></script>
+<script src="/static/app.js"></script>
+<script src="/static/spending.js?v=1"></script>
+<script src="/static/plan.js?v=10"></script>
+<script src="/static/market.js?v=6"></script>
+<script src="/static/bank.js?v=2"></script>
+<script src="/static/passkey.js"></script>
+<script src="/static/security.js?v=2"></script>
+<script src="/static/assistant.js"></script>
+</body>
+</html>

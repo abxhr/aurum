@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Aurum · Add this phone</title>
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="/static/fonts/fonts.css">
+<script src="/static/theme.js"></script>
+<link rel="stylesheet" href="/static/auth.css">
+</head>
+<body>
+<div class="card">
+  <div class="mark" style="background:none;padding:0"><img src="/static/icons/logo.svg" alt="" width="48" height="48" style="border-radius:12px;display:block"></div>
+  <h1>Add this phone</h1>
+  <p class="sub">From now on this phone opens the app with Face ID, and nothing else.</p>
+  <input id="name" type="text" value="iPhone" maxlength="40" aria-label="Device name">
+  <button id="btn">Set up Face ID</button>
+  <div class="err" id="err" role="alert"></div>
+</div>
+<script src="/static/passkey.js"></script>
+<script src="/static/enroll.js"></script>
+</body>
+</html>

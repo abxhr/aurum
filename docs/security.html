@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Security · Aurum</title><meta name="description" content="Threat model, protections and known limits.">
+<link rel="icon" href="assets/favicon.png"><link rel="stylesheet" href="assets/fonts.css"><link rel="stylesheet" href="assets/site.css"></head>
+<body><header class="top"><div class="in"><a class="brand" href="index.html"><img src="assets/logo.svg" alt="">Aurum</a><nav aria-label="Main"><a href="index.html">Home</a><a href="features.html">Features</a><a href="setup.html">Set up</a><a href="banks.html">Any bank</a><a href="integrations.html">Integrations</a><a href="phone.html">Phone</a><a href="security.html" aria-current="page">Security</a><a href="https://github.com/abxhr/aurum">GitHub</a></nav></div></header>
+<main class="wrap">
+
+<h1>Security</h1>
+<p class="lead">Aurum holds money information, so it is built to be private by default, and the protections are tested.</p>
+
+<h2>What it protects, and from whom</h2>
+<p><b>Assets:</b> balances, holdings, card and bank transactions, payslips, API keys, e-mail and PDF passwords. <b>Threats considered:</b> another site in your browser attacking the local server; someone on your network or the internet probing it; a copied database or backup; a lost phone; malicious text in a web page, merchant name or e-mail trying to steer the assistant.</p>
+
+<h2>What is in place</h2>
+<table>
+<tr><th>Area</th><th>Protection</th></tr>
+<tr><td>Network</td><td>Listens on <code>127.0.0.1</code> only (waitress). Requests must carry a known <code>Host</code> header, which defeats DNS rebinding. The phone path is a private Tailscale HTTPS address, never the public internet.</td></tr>
+<tr><td>Sign-in</td><td>Every route requires a session except a short allow-list (sign-in pages, static files). Passwords: 12+ characters, scrypt (N=2<sup>15</sup>), constant-time compare, growing lockout after three failures. No default password exists; first run is a setup page.</td></tr>
+<tr><td>Face ID</td><td>WebAuthn passkeys verified server-side: challenge, origin, app identity, user-verification flag, signature and sign counter. Phones never accept passwords. Remote sessions lock after 2 idle minutes.</td></tr>
+<tr><td>Sessions</td><td>Random 256-bit cookie, only its hash is stored. <code>HttpOnly</code>, <code>SameSite=Strict</code>, <code>Secure</code> over HTTPS. Listed, revocable, expiring.</td></tr>
+<tr><td>CSRF</td><td>Every state-changing request needs a custom header, a same-origin <code>Sec-Fetch-Site</code>, and an allowed <code>Origin</code>.</td></tr>
+<tr><td>Browser</td><td>Strict CSP (<code>script-src 'self'</code>, no framing, no external requests), <code>nosniff</code>, <code>no-referrer</code>, Permissions-Policy, COOP/CORP, HSTS on HTTPS, <code>no-store</code> on API pages. Fonts, charts and QR codes are vendored: no third-party requests from the page.</td></tr>
+<tr><td>Secrets at rest</td><td>API keys, broker tokens, mail and PDF passwords are sealed before they touch the database: Windows DPAPI on Windows (no key file), Fernet with an owner-only key file elsewhere. They are never returned to the browser, and the settings API exposes only a short allow-list.</td></tr>
+<tr><td>SSRF</td><td>Web research resolves a host once, refuses private, loopback and link-local addresses, pins the connection to the checked address and re-checks every redirect.</td></tr>
+<tr><td>Assistant</td><td>No trading tool. It can only read and propose; every change is a card you approve. Text from the web, merchants and e-mail is treated as data, never instructions. Errors shown to you are generic; details stay in the log.</td></tr>
+<tr><td>Demo mode</td><td>A separate database file with invented data. In a demo session, anything that touches a real account, mailbox, broker or phone is blocked.</td></tr>
+<tr><td>Backups</td><td>Contain no password hash, sessions, passkeys or keys (tested).</td></tr>
+<tr><td>Repository</td><td><code>.env</code>, <code>data/</code>, <code>*.db</code>, keys and credentials are git-ignored. <code>backend/test_repo_clean.py</code> fails the build on key-shaped strings, private keys or personal e-mail addresses, and CI runs it on every push.</td></tr>
+</table>
+<p>Run the checks yourself: <code>python backend/test_security.py</code> exercises setup mode, lockout, forged and cross-site requests, rebinding hosts, the remote rules, a full Face ID flow with a software authenticator, idle locking, sealed secrets and clean backups.</p>
+
+<h2>Your responsibilities</h2>
+<ul>
+<li><b>Disk encryption</b> (BitLocker, FileVault, LUKS). The database is a normal SQLite file apart from the sealed secrets.</li>
+<li><b>Back up</b> <code>data/</code>; on macOS/Linux keep <code>data/secrets.key</code> out of any backup that also holds the database, or the encryption is moot.</li>
+<li><b>Never expose the port</b> to the internet, and do not use <code>tailscale funnel</code>.</li>
+<li><b>Choose a long password</b> and a phone passcode. An unlocked, signed-in computer is a signed-in app.</li>
+<li><b>Third parties you opt into</b> see what you send them: Yahoo Finance (tickers), your AI provider (the question and the data needed for it), Gmail (read-only IMAP), your broker (read-only).</li>
+<li>Dependencies are pinned in <code>requirements.txt</code>; update deliberately and re-run the tests.</li>
+</ul>
+
+<h2>Reporting a problem</h2>
+<p>Please report vulnerabilities privately through <a href="https://github.com/abxhr/aurum/security/advisories/new">GitHub's private vulnerability reporting</a> rather than a public issue. See <a href="https://github.com/abxhr/aurum/blob/main/SECURITY.md">SECURITY.md</a>.</p>
+
+<footer>Aurum is a private, single-user app that runs on your own computer. Every screenshot on this site comes from the built-in demo: an invented person, invented banks and merchants, all amounts in US dollars. No real data appears anywhere in this repository. MIT licensed. Not financial advice.</footer>
+</main></body></html>

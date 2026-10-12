@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Aurum · Sign in</title>
+<meta name="theme-color" content="#ECEEE9">
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="/static/fonts/fonts.css">
+<script src="/static/theme.js"></script>
+<link rel="stylesheet" href="/static/auth.css">
+</head>
+<body>
+<div class="card">
+  <div class="mark" style="background:none;padding:0"><img src="/static/icons/logo.svg" alt="" width="48" height="48" style="border-radius:12px;display:block"></div>
+  <h1>Welcome back</h1>
+  <p class="sub" id="sub">&nbsp;</p>
+  <div id="pwBox" hidden>
+    <input id="pw" type="password" placeholder="Password" autocomplete="current-password">
+    <button id="btn">Sign in</button>
+  </div>
+  <div id="pkBox" hidden>
+    <button id="pkBtn">Unlock with Face ID</button>
+  </div>
+  <div class="err" id="err" role="alert"></div>
+  <button id="demoBtn" class="alt" type="button">Open the demo instead</button>
+</div>
+<script src="/static/passkey.js"></script>
+<script src="/static/login.js"></script>
+</body>
+</html>

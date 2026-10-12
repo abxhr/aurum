@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Features · Aurum</title><meta name="description" content="Every page of Aurum explained.">
+<link rel="icon" href="assets/favicon.png"><link rel="stylesheet" href="assets/fonts.css"><link rel="stylesheet" href="assets/site.css"></head>
+<body><header class="top"><div class="in"><a class="brand" href="index.html"><img src="assets/logo.svg" alt="">Aurum</a><nav aria-label="Main"><a href="index.html">Home</a><a href="features.html" aria-current="page">Features</a><a href="setup.html">Set up</a><a href="banks.html">Any bank</a><a href="integrations.html">Integrations</a><a href="phone.html">Phone</a><a href="security.html">Security</a><a href="https://github.com/abxhr/aurum">GitHub</a></nav></div></header>
+<main class="wrap">
+
+<h1>Features</h1>
+<p class="lead">Nine pages, one local app. Screenshots are the demo data set.</p>
+
+<h2>Overview</h2>
+<p>Net worth with history, the safe versus growth split, cash runway in months, savings rate, everyday card spend, and a "needs your attention" list (due cards, unfunded goals, idle cash, concentration, unusual spending). Tabs for money, spending, insights and data.</p>
+<div class="shot"><img src="assets/shots/overview.png" alt="Overview" loading="lazy"></div>
+
+<h2>Portfolio</h2>
+<p>Holdings of any kind: stocks, ETFs, mutual funds, bonds, savings, gold, crypto, cash. Priced live from Yahoo Finance (tickers, fund NAVs), or entered by hand. Foreign-currency holdings are converted at daily rates. Optional read-only sync from Interactive Brokers (Flex Query) and eToro. Target allocation, gain and loss against cost, and a net-worth snapshot taken daily.</p>
+<div class="shot"><img src="assets/shots/portfolio.png" alt="Portfolio" loading="lazy"></div>
+
+<h2>Cards</h2>
+<p>Add your credit cards, then either point the app at the mailbox where statements arrive (it reads the PDFs: totals, due dates, every transaction) or import a CSV export from your issuer. Both work for any bank: see <a href="banks.html">Any bank</a>. Spending is sorted into categories and sub-categories by a rule engine (with a cheap AI fallback you can switch off), grouped into trips by country, and measured per statement cycle because each card closes on a different day. Rewards, fees and exchange-rate markup are measured from the statements, so "is this card worth it?" has a number for an answer.</p>
+<div class="shot"><img src="assets/shots/cards.png" alt="Cards" loading="lazy"></div>
+
+<h2>Plan</h2>
+<p>A money plan built from what you really earn and spend: where the emergency fund stands, what each dated goal still needs per month, how much is free to invest and a staged way to do it. Projections run your net worth forward on optimistic, typical and cautious paths. Your own investing rules (for example "index funds only" or any ethical screen) are given to the assistant as hard constraints.</p>
+<div class="shot"><img src="assets/shots/plan.png" alt="Plan" loading="lazy"></div>
+
+<h2>Income, Bank, Budget</h2>
+<ul>
+<li><b>Income:</b> payslips read from PDF (two-column or single-column layouts): gross, net, allowances, deductions, the typical month and the annual bonus averaged in. Deductions that are really your own spending (a company shop, travel bought through payroll) can be flagged by a word in their label.</li>
+<li><b>Bank:</b> bank statements (e-mailed PDFs or CSV) classified into salary, investing, family support, cash, fees and card payments, so money that merely moves between your own accounts is not counted as spending.</li>
+<li><b>Budget:</b> planned lines compared with what the cards say you actually spend, irregular lines (trips, school fees) judged over a year, and a check-up that points out what the plan is missing.</li>
+</ul>
+<div class="gallery"><figure style="margin:0"><div class="shot"><img src="assets/shots/income.png" alt="Income" loading="lazy"></div><figcaption>Income</figcaption></figure><figure style="margin:0"><div class="shot"><img src="assets/shots/budget.png" alt="Budget" loading="lazy"></div><figcaption>Budget</figcaption></figure></div>
+
+<h2>Market</h2>
+<p>A calm daily briefing (mood, next-buy card), market tiles, headlines, a backtest of "does waiting a few days after payday actually help?", and a watchlist with a buy/hold/avoid read built from price trend plus web evidence. It never predicts and never trades.</p>
+
+<h2>Assistant</h2>
+<p>Chat with Claude or GPT using your own API key. It has tools to read your data, research the web and run the planning engine, and it can <i>propose</i> changes (a budget line, a category, a goal) that appear as cards you press Apply on. Web pages and merchant names are treated as untrusted text. Everything it spends is logged under Settings, and answers are cached so the same question costs nothing twice.</p>
+<div class="shot"><img src="assets/shots/assistant.png" alt="Assistant" loading="lazy"></div>
+
+<h2>Settings</h2>
+<p>App name, <b>currency</b>, your names (so transfers to yourself and family are read correctly), exchange rates, automatic sync, e-mail, brokers, AI usage, security and a backup download.</p>
+<div class="shot"><img src="assets/shots/settings.png" alt="Settings" loading="lazy"></div>
+
+<h2>Where it is limited</h2>
+<div class="note"><p><b>Readers are generic, so odd formats need a nudge.</b> The PDF reader looks for lines that start with a date and end with an amount, works out the sign convention for each file, and reads labelled totals ("total amount due", "minimum payment", "due date"). That covers most statements. When a layout defeats it (scrambled columns, image-only PDFs), import a CSV instead, or add a small <a href="banks.html#plugins">parser plugin</a> that stays on your computer. Market data, exchange rates and fund prices come from Yahoo Finance and need a network connection. Changing your currency relabels existing amounts, it does not convert them.</p></div>
+
+<footer>Aurum is a private, single-user app that runs on your own computer. Every screenshot on this site comes from the built-in demo: an invented person, invented banks and merchants, all amounts in US dollars. No real data appears anywhere in this repository. MIT licensed. Not financial advice.</footer>
+</main></body></html>

@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Integrations · Aurum</title><meta name="description" content="Connect statement e-mail, brokers and AI keys. All optional; keys are stored encrypted.">
+<link rel="icon" href="assets/favicon.png"><link rel="stylesheet" href="assets/fonts.css"><link rel="stylesheet" href="assets/site.css"></head>
+<body><header class="top"><div class="in"><a class="brand" href="index.html"><img src="assets/logo.svg" alt="">Aurum</a><nav aria-label="Main"><a href="index.html">Home</a><a href="features.html">Features</a><a href="setup.html">Set up</a><a href="banks.html">Any bank</a><a href="integrations.html" aria-current="page">Integrations</a><a href="phone.html">Phone</a><a href="security.html">Security</a><a href="https://github.com/abxhr/aurum">GitHub</a></nav></div></header>
+<main class="wrap">
+
+<h1>Integrations</h1>
+<p class="lead">All optional. Aurum works with none of them: you can type everything in. Anything you enter in Settings is stored encrypted on this computer and never sent back to the browser.</p>
+
+<h2>AI assistant (Anthropic or OpenAI)</h2>
+<ol class="steps"><li>Create an API key at <a href="https://console.anthropic.com">console.anthropic.com</a> or <a href="https://platform.openai.com">platform.openai.com</a>.</li>
+<li>Assistant &rarr; settings &rarr; <i>Model and behaviour</i>. Pick the provider and paste the key. (Or put <code>ANTHROPIC_API_KEY</code> / <code>OPENAI_API_KEY</code> in a <code>.env</code> file; copy <code>.env.example</code>.)</li>
+<li>Watch cost: Settings shows a 30-day usage table. Analyses are only re-run when your numbers change.</li></ol>
+<p>Only the assistant and the optional AI categoriser call these services, and only with the data needed for that question. Without a key those features simply stay off.</p>
+
+<h2>Statements by e-mail (Gmail)</h2>
+<p>Reads statement e-mails and their PDF attachments. It only reads; it cannot send or delete. How the statements are then interpreted is on the <a href="banks.html">Any bank</a> page.</p>
+<ol class="steps"><li>Turn on 2-Step Verification on your Google account.</li>
+<li>Google Account &rarr; Security &rarr; <b>App passwords</b> &rarr; create one named "Aurum".</li>
+<li>Settings &rarr; Gmail Email Sync &rarr; enter your address and the 16-character code &rarr; <i>Connect with App Password</i>.</li>
+<li>Tell it which e-mails are statements: for a card, Cards &rarr; Add card (sender address, a subject word, the PDF password if there is one). For a bank account, Settings &rarr; Bank accounts &rarr; the sender and subject word.</li></ol>
+<p>Prefer Google sign-in over an app password? See <a href="https://github.com/abxhr/aurum/blob/main/GMAIL-SETUP.md">GMAIL-SETUP.md</a> for the OAuth route.</p>
+
+<h2>Interactive Brokers (read-only)</h2>
+<ol class="steps"><li>Client Portal &rarr; Performance &amp; Reports &rarr; <b>Flex Queries</b> &rarr; create an Activity Flex Query containing <i>Account Information, Open Positions, Cash Report</i> (XML).</li>
+<li>Flex Web Service &rarr; enable it and copy the <b>token</b>; note the <b>query ID</b>.</li>
+<li>Settings &rarr; Interactive Brokers &rarr; paste both. Positions and cash sync on a schedule. Aurum cannot trade.</li></ol>
+
+<h2>eToro (read-only)</h2>
+<ol class="steps"><li>eToro &rarr; Settings &rarr; Trading &rarr; API Key Management.</li>
+<li>Create a key for the <b>Real</b> environment with <b>Read</b> permission only.</li>
+<li>Paste the keys under Settings &rarr; eToro. Syncs every six hours; leveraged, short and copy-trading positions are skipped.</li></ol>
+
+<h2>Payslips</h2>
+<p>Income page &rarr; set the sender and PDF password for your payroll e-mails; Aurum reads gross, net, allowances and deductions from two-column (earnings left, deductions right) and single-column layouts. If yours is not recognised, enter income manually in the Budget.</p>
+
+<h2>Phone alerts</h2>
+<p>See the <a href="phone.html">phone guide</a>. Alerts are for new statements and rare market moves only.</p>
+
+<footer>Aurum is a private, single-user app that runs on your own computer. Every screenshot on this site comes from the built-in demo: an invented person, invented banks and merchants, all amounts in US dollars. No real data appears anywhere in this repository. MIT licensed. Not financial advice.</footer>
+</main></body></html>

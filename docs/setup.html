@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Set up · Aurum</title><meta name="description" content="Install and run Aurum, choose your currency, keep it running, back up and update.">
+<link rel="icon" href="assets/favicon.png"><link rel="stylesheet" href="assets/fonts.css"><link rel="stylesheet" href="assets/site.css"></head>
+<body><header class="top"><div class="in"><a class="brand" href="index.html"><img src="assets/logo.svg" alt="">Aurum</a><nav aria-label="Main"><a href="index.html">Home</a><a href="features.html">Features</a><a href="setup.html" aria-current="page">Set up</a><a href="banks.html">Any bank</a><a href="integrations.html">Integrations</a><a href="phone.html">Phone</a><a href="security.html">Security</a><a href="https://github.com/abxhr/aurum">GitHub</a></nav></div></header>
+<main class="wrap">
+
+<h1>Set up</h1>
+<p class="lead">About ten minutes. Aurum runs on your own computer and listens only on that computer.</p>
+
+<h2>What you need</h2>
+<ul><li>Windows, macOS or Linux.</li><li><b>Python 3.11 or newer</b> (developed on 3.14). On Windows, tick "Add Python to PATH" in the installer.</li><li><b>Git</b>, to download and update the code (or download the repository as a zip).</li></ul>
+
+<h2>1 &middot; Get it running</h2>
+<ol class="steps">
+<li><b>Download</b> the code.<pre><code>git clone https://github.com/abxhr/aurum.git aurum
+cd aurum</code></pre></li>
+<li><b>Start it.</b> The first run creates a private Python environment, installs the requirements and starts the server (a few minutes).
+<pre><code># Windows
+run.bat
+
+# macOS / Linux
+chmod +x run.sh
+./run.sh</code></pre></li>
+<li><b>Open</b> <code>http://localhost:5000</code> in a browser on the same computer.</li>
+<li><b>Set a password and your currency.</b> Use 12 or more characters; a few random words is easy to remember and hard to guess. There is no account and no sign-up: this password only protects this computer's copy.</li>
+</ol>
+<div class="note ok"><p><b>Just looking?</b> On the sign-in page press <i>Open the demo instead</i>. It shows an invented year of data and never touches yours.</p></div>
+
+<h2>2 &middot; Make it yours</h2>
+<ol class="steps">
+<li><b>Settings (bottom of the sidebar).</b> Set the app name, <b>currency</b> and monthly income. Choose the currency before you enter anything: changing it later relabels amounts, it does not convert them. Exchange rates for other currencies are fetched automatically.</li>
+<li><b>Preferences.</b> Payday, whether statement dates are day-first or month-first, your home country (charges there are not counted as trips) and your time zone (for market hours).</li>
+<li><b>Your names.</b> Optional. Your first name lets the Bank page recognise transfers to yourself; family names label money sent to family.</li>
+<li><b>Add holdings.</b> Portfolio &rarr; Add holding. Pick a type, then either a ticker or fund code (priced live) or a value you type in.</li>
+<li><b>Tell the assistant about you</b> (Assistant &rarr; settings &rarr; About you): goals, risk, and investing rules such as "index funds only" or "no tobacco". It reads this every time.</li>
+<li><b>Bring in your banks and cards:</b> <a href="banks.html">CSV import or statement e-mails</a>. Then <a href="integrations.html">brokers and AI keys</a> if you want them.</li>
+</ol>
+
+<h2>3 &middot; Keep it running in the background</h2>
+<h3>Windows</h3>
+<p>Run <code>install-windows-background.bat</code> once. It registers a hidden scheduled task that starts Aurum at sign-in and restarts it if it stops, and it locks the <code>data</code> folder to your Windows account. Logs are in <code>data\logs</code>. Remove it with <code>powershell -ExecutionPolicy Bypass -File scripts\install-background.ps1 -Remove</code>.</p>
+<h3>macOS / Linux</h3>
+<p>Run the production server (waitress, bound to 127.0.0.1) under whatever you normally use, for example a systemd user service:</p>
+<pre><code>[Unit]
+Description=Aurum
+[Service]
+WorkingDirectory=%h/aurum
+ExecStart=%h/aurum/.venv/bin/python backend/serve.py
+Restart=always
+[Install]
+WantedBy=default.target</code></pre>
+
+<h2>4 &middot; Your data</h2>
+<ul>
+<li>Everything lives in <code>data/</code>: <code>portfolio.db</code> (one SQLite file) <code>parsers/</code> (your private reader plugins) and, on macOS/Linux, <code>secrets.key</code>. None of it is ever committed; <code>.gitignore</code> excludes them.</li>
+<li><b>Backup:</b> Settings &rarr; Backup &rarr; Download. It contains your data without sign-in material (no password hash, sessions, passkeys or keys).</li>
+<li><b>Moving computers:</b> copy <code>data/portfolio.db</code>. Keys sealed on Windows (DPAPI) only open on the same Windows account; re-enter them on the new machine.</li>
+<li><b>Update:</b> <code>git pull</code>, then start it again. Tables upgrade themselves.</li>
+</ul>
+
+<h2>5 &middot; Check it works</h2>
+<pre><code>python backend/test_security.py
+python backend/test_basics.py
+python backend/test_repo_clean.py</code></pre>
+<p>Run them with the project's Python (<code>.venv\Scripts\python</code> on Windows, <code>.venv/bin/python</code> elsewhere). Each prints a pass line; any failure exits non-zero.</p>
+
+<h2>Troubleshooting</h2>
+<table><tr><th>Problem</th><th>Fix</th></tr>
+<tr><td>"Address already in use"</td><td>Another copy is running. Close it, or start with another port: <code>PORT=5050 ./run.sh</code> (Windows: <code>set PORT=5050</code> first). Use that port in the address.</td></tr>
+<tr><td>Browser says "not found" on a custom address</td><td>The app answers only to <code>localhost</code>, <code>127.0.0.1</code> and your private Tailscale name. This blocks DNS-rebinding attacks. Use one of those.</td></tr>
+<tr><td>Forgot the password</td><td>Stop the app, then run <code>sqlite3 data/portfolio.db "DELETE FROM settings WHERE key='pw_hash'"</code>. The app starts in setup mode and asks for a new one. Your data is untouched.</td></tr>
+<tr><td>A price shows a dash</td><td>Prices come from Yahoo Finance, which sometimes rate-limits. Press <i>Sync prices</i> again later, or type a value by hand.</td></tr>
+<tr><td>Currency looks wrong after changing it</td><td>Changing currency relabels, it does not convert. Re-enter amounts, or set it back.</td></tr></table>
+
+<footer>Aurum is a private, single-user app that runs on your own computer. Every screenshot on this site comes from the built-in demo: an invented person, invented banks and merchants, all amounts in US dollars. No real data appears anywhere in this repository. MIT licensed. Not financial advice.</footer>
+</main></body></html>

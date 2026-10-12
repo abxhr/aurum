@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Any bank · Aurum</title><meta name="description" content="How Aurum reads statements from any bank: CSV import, e-mailed PDFs, and private parser plugins.">
+<link rel="icon" href="assets/favicon.png"><link rel="stylesheet" href="assets/fonts.css"><link rel="stylesheet" href="assets/site.css"></head>
+<body><header class="top"><div class="in"><a class="brand" href="index.html"><img src="assets/logo.svg" alt="">Aurum</a><nav aria-label="Main"><a href="index.html">Home</a><a href="features.html">Features</a><a href="setup.html">Set up</a><a href="banks.html" aria-current="page">Any bank</a><a href="integrations.html">Integrations</a><a href="phone.html">Phone</a><a href="security.html">Security</a><a href="https://github.com/abxhr/aurum">GitHub</a></nav></div></header>
+<main class="wrap">
+
+<h1>Any bank, card or payslip</h1>
+<p class="lead">Aurum does not know your bank in advance. It reads statements generically, and you have three ways in, from easiest to most flexible.</p>
+
+<h2>1 &middot; Import a CSV</h2>
+<p>Almost every bank and card issuer can export your transactions as a CSV file.</p>
+<ul>
+<li><b>Cards:</b> Cards &rarr; <i>Import CSV</i>, pick the file, choose the card. The rows are grouped into statement cycles using the card's statement day and categorised.</li>
+<li><b>Bank accounts:</b> Bank &rarr; <i>Import CSV</i>, pick the file, name the account.</li>
+</ul>
+<p>The columns are found by their headers (date, description, amount, or separate debit and credit columns, and an optional balance), with comma, semicolon or tab separators and decimal commas. Whether purchases are negative or positive is worked out from the file itself. Whether <code>07/08/2026</code> means 7 August or July 8 is taken from the file when any date proves it, otherwise from Settings &rarr; Dates on statements. Importing the same file twice is harmless.</p>
+
+<h2>2 &middot; Read the statement e-mails</h2>
+<p>Connect your mailbox (see <a href="integrations.html">Integrations</a>), then tell Aurum which e-mails are statements: the sender and a word from the subject. Aurum opens the PDF (with the password you stored, encrypted) and reads it with the generic reader:</p>
+<ul>
+<li><b>Card statements:</b> labelled totals (<i>total amount due, new balance, minimum payment, payment due date</i>, with any currency symbol or code), then every line that starts with a date and ends with an amount. Two dates (transaction and posting) are fine, years may be missing, <code>CR</code>/<code>DR</code> markers and brackets are honoured, and a foreign amount before the charged amount is kept for the exchange-rate analysis.</li>
+<li><b>Bank statements:</b> a date, a description and one to three amounts. Debit or credit is decided by how the running balance moved, so a layout with a single amount column works.</li>
+<li><b>Payslips:</b> earnings and deductions in two columns or one, the printed net pay, totals checked against what the payslip itself prints. A payslip whose numbers do not add up is flagged for a look rather than trusted.</li>
+</ul>
+<div class="note"><p><b>It will not always work.</b> Scrambled column order, image-only PDFs and unusual layouts defeat any generic reader. When that happens the transactions are simply not imported (never imported wrongly if the balance chain does not add up), and the fix is a CSV or a plugin.</p></div>
+
+<h2 id="plugins">3 &middot; A private parser plugin</h2>
+<p>For a bank whose PDF needs its own rules, put a Python file in <code>data/parsers/</code>. That folder is git-ignored: it stays on your computer and is never committed. Every <code>.py</code> file there is loaded at start-up; a broken one is logged and skipped, never fatal. A plugin can define any of these (all optional):</p>
+<table>
+<tr><th>Name</th><th>What it does</th></tr>
+<tr><td><code>CARD_TXN_PARSERS</code></td><td><code>{"Bank name": fn(pdf_text, statement_date_iso)}</code> returning <code>[{"txn_date", "description", "amount"}]</code>, amount positive for spending. Optional <code>fx_currency</code>, <code>fx_amount</code>, <code>fx_rate</code>.</td></tr>
+<tr><td><code>CARD_SUMMARY_PATTERNS</code>, <code>CARD_SUMMARY_PARSERS</code></td><td>Regexes (first group is the value) or a function for the total due, minimum due and due date.</td></tr>
+<tr><td><code>ACCOUNT_PARSERS</code></td><td><code>{"name": {"sender", "subject", "parse": fn(pdf_text)}}</code>: a bank account whose statements are read by your function, with its e-mail details built in.</td></tr>
+<tr><td><code>TRANSFER_RULES</code></td><td><code>fn(description, debit, credit, family_names, my_names)</code> returning a kind such as <code>family</code>, <code>education</code>, <code>investing</code> or <code>None</code>.</td></tr>
+<tr><td><code>CATEGORY_RULES</code>, <code>CATEGORY_SEED</code></td><td>Extra merchant rules, <code>(category, sub_category, regex)</code>, tried before the built-in ones.</td></tr>
+<tr><td><code>BANK_EMAIL_SENDERS</code>, <code>BANK_COLORS</code></td><td>Suggested sender addresses and card colours per bank name.</td></tr>
+<tr><td><code>REWARD_PARSER</code>, <code>DEFAULT_REWARD_RULES</code></td><td>Cashback or points printed on your statements, and each card's earning rules.</td></tr>
+<tr><td><code>DEFAULT_HOME_COUNTRY</code>, <code>HOME_REGEX</code>, <code>CITY_HINTS</code></td><td>Home-country default, place names that mean "home", and extra city lists for trip detection.</td></tr>
+<tr><td><code>MARKET_FUNDS</code>, <code>NAV_PROVIDER</code></td><td>The funds the Market page compares, and a daily-NAV price source for mutual funds.</td></tr>
+<tr><td><code>EXTRA_MONTHLY_SPEND</code></td><td><code>fn()</code> returning spending you can measure that no card, budget line or bank line shows.</td></tr>
+</table>
+<p>A complete minimal plugin:</p>
+<pre><code># data/parsers/my_bank.py
+import re
+
+LINE = re.compile(r"^(\d{2})\.(\d{2})\.(\d{4})\s+(.+?)\s+(-?[\d.]+,\d{2})$")   # 31.07.2026  SHOP NAME  -12,50
+
+
+def parse(text, statement_date):
+    out = []
+    for line in text.splitlines():
+        m = LINE.match(line.strip())
+        if m:
+            d, mo, y, desc, amt = m.groups()
+            out.append({"txn_date": f"{y}-{mo}-{d}", "description": desc, "amount": -float(amt.replace(".", "").replace(",", "."))})
+    return out
+
+
+CARD_TXN_PARSERS = {"My Bank": parse}
+CATEGORY_RULES = [("Dining", "Restaurant", r"my favourite place")]</code></pre>
+<p>Restart Aurum after adding or editing a plugin. The card's <i>Bank</i> field must match the name in <code>CARD_TXN_PARSERS</code> exactly. <code>backend/test_parsers.py</code> shows the hooks being used. If your reader would help others, a pull request that adds it as a generic improvement is welcome (without any real statement text in the tests).</p>
+
+<h2>Brokers and other services</h2>
+<p>Interactive Brokers (Flex Query) and eToro (read-only API) connect from Settings; see <a href="integrations.html">Integrations</a>. Anything else can be entered by hand or priced live by ticker.</p>
+
+<footer>Aurum is a private, single-user app that runs on your own computer. Every screenshot on this site comes from the built-in demo: an invented person, invented banks and merchants, all amounts in US dollars. No real data appears anywhere in this repository. MIT licensed. Not financial advice.</footer>
+</main></body></html>
